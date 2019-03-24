@@ -1,16 +1,16 @@
 {
-  "name": "notes-app-api",
+  "name": "simply-noteit-api",
   "version": "1.1.0",
-  "description": "A Node.js starter for the Serverless Framework with async/await and unit test support",
+  "description": "The back-end API for the NoteIt app, by Simply. Based on the tutorial by Seed - Serverless Stack (serverless-stack.com)",
   "main": "handler.js",
   "scripts": {
     "test": "jest"
   },
-  "author": "",
+  "author": "Simply - Design & IT",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AnomalyInnovations/serverless-nodejs-starter.git"
+    "url": "https://github.com/filipesmedeiros/noteit-api.git"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
