@@ -1,3 +1,4 @@
+// noinspection ES6CheckImport
 import AWS from "aws-sdk";
 
 export function call(action, params) {
