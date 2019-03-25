@@ -1,4 +1,4 @@
-service: simply-noteit-api
+service: ${self:custom.app-name}-api
 
 # Use the serverless-webpack plugin to transpile ES6
 plugins:
@@ -6,11 +6,13 @@ plugins:
   - serverless-offline
 
 custom:
+  # Change this variable to be unique within your apps
+  app-name:  simply-noteit
   # Our stage is based on what is passed in when running serverless
   # commands. Or fallsback to what we have set in the provider section.
   stage: ${opt:stage, self:provider.stage}
   # Set the table name here so we can use it while testing locally
-  tableName: ${self:custom.stage}-noteit-notes
+  tableName: ${self:custom.stage}-${self:custom.app-name}-notes
   # Set our DynamoDB throughput for prod and all other non-prod stages.
   tableThroughputs:
     prod: 5
