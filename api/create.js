@@ -4,8 +4,11 @@ import { success, failure } from "../libs/response-lib";
 
 export async function main(event, context) {
     const data = JSON.parse(event.body);
+
+    // process.env is accessing the environment variables at runtime, so the IDE throws a warning
+    // noinspection JSUnresolvedVariable
     const params = {
-        TableName: "noteit-notes",
+        TableName: process.env.tableName,
         Item: {
             userId: event.requestContext.identity.cognitoIdentityId,
             noteId: uuid.v1(),

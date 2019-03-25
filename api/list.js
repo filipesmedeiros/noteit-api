@@ -2,8 +2,10 @@ import * as dynamoDbLib from "../libs/dynamodb-lib";
 import { success, failure } from "../libs/response-lib";
 
 export async function main(event, context) {
+    // process.env is accessing the environment variables at runtime, so the IDE throws a warning
+    // noinspection JSUnresolvedVariable
     const params = {
-        TableName: "noteit-notes",
+        TableName: process.env.tableName,
         // 'KeyConditionExpression' defines the condition for the query
         // - 'userId = :userId': only return items with matching 'userId'
         //   partition key
