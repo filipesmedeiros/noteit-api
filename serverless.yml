@@ -128,7 +128,7 @@ functions:
   # - path: url path is /billing
   # - method: POST request
   billing:
-    handler: billing.main
+    handler: api/billing.main
     events:
       - http:
           path: billing
