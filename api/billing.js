@@ -3,7 +3,7 @@ import { calculateCost } from '../libs/billing-lib';
 import { success, failure } from '../libs/response-lib';
 
 export async function main(event, context) {
-    const { storage, stripeToken } = JSON.parse(event.body);
+    const { storage, source: stripeToken } = JSON.parse(event.body);
     const price = calculateCost(storage);
     const description = 'NoteIt charge';
 
