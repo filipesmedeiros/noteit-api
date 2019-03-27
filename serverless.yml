@@ -59,7 +59,6 @@ provider:
       Resource:
         - "Fn::GetAtt": [ NotesTable, Arn ]
 
-
 functions:
   # Defines an HTTP API endpoint that calls the main function in create.js
   # - path: url path is /notes
@@ -148,4 +147,3 @@ resources:
   # Cognito
   - ${file(resources/cognito-user-pool.yml)}
   - ${file(resources/cognito-identity-pool.yml)}
-  -
