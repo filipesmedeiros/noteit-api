@@ -32,7 +32,7 @@ provider:
 
   # Change this according to the stage in which you are developing
   stage: dev
-  region: eu-west-3
+  region: eu-west-2
 
   # These environment variables are made available to our functions
   # under process.env.

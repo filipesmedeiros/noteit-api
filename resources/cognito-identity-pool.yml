@@ -4,7 +4,7 @@ Resources:
     Type: AWS::Cognito::IdentityPool
     Properties:
       # Generate a name based on the stage
-      IdentityPoolName: ${self:custom.stage}${self:custom.app-name}IdentityPool
+      IdentityPoolName: ${self:custom.stage}_${self:custom.app-name}_Identity_Pool
       # Don't allow unathenticated users
       AllowUnauthenticatedIdentities: false
       # Link to our User Pool
