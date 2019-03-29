@@ -1,14 +1,12 @@
-config: ${file(../../config.yml):config}
-
 service: ${self:config.app-name}-api
 
 provider:
-  name: ${self:config.provider.name}
-  runtime: ${self:config.provider.runtime}
+  name: ${file(../../config.yml):config.name}
+  runtime: ${file(../../config.yml):config.runtime}
 
   # Change this according to the stage in which you are developing
-  stage: ${self:config.provider.stage}
-  region: ${self:config.provider.region}
+  stage: ${file(../../config.yml):config.stage}
+  region: ${file(../../config.yml):config.region}
 
   # These environment variables are made available to our functions
   # under process.env.
@@ -31,7 +29,7 @@ provider:
       # Restrict our IAM role permissions to
       # the specific table for the stage
       Resource:
-        - 'Fn::ImportValue': ${self:config.provider.stage}-NotesTableArn
+        - 'Fn::ImportValue': ${self:provider.stage}-NotesTableArn
 
 functions:
   # Defines an HTTP API endpoint that calls the main function in create.js
