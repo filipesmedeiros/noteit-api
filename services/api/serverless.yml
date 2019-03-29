@@ -1,6 +1,6 @@
 config: ${file(/config.yml)}
 
-configTest: $file(../../config.yml):config}
+configTest: ${file(../../config.yml):config}
 test: ${self:configTest.app-name)}
 
 service: ${self:config.app-name}-api
