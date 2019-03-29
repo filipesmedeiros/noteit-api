@@ -14,7 +14,7 @@ provider:
 
   # Change this according to the stage in which you are developing
   stage: ${self:custom.stage}
-  region: eu-west-2
+  region: ${file(../../test.yml):custom.region}
 
   # These environment variables are made available to our functions
   # under process.env.
