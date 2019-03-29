@@ -3,7 +3,7 @@ config: ${file(/config.yml)}
 configTest: ${file(../../config.yml):config}
 test: ${self:configTest.app-name)}
 
-service: ${self:config.app-name}-api
+service: ${self:configTest.app-name}-api
 
 provider:
   name: ${file(/config.yml):config.name}
