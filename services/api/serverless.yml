@@ -1,26 +1,18 @@
-service: noteit-api
-
-# It's important that this part is always the same for all services in the app, for each deploy
-# Except for the environment variables, that can be different
-custom:
-  stage: dev
-  # Load our secret environment variables based on the current stage.
-  # Fallback to default if it is not in prod.
-  environmentSecrets: ${file(env.yml):${self:custom.stage}, file(env.yml):default}
+service: ${file(../../config.yml):custom.appname}-api
 
 provider:
-  name: aws
-  runtime: nodejs8.10
+  name: ${file(../../config.yml):custom.provider.name}
+  runtime: ${file(../../config.yml):custom.provider.runtime}
 
   # Change this according to the stage in which you are developing
-  stage: ${self:custom.stage}
-  region: ${file(../../test.yml):custom.region}
+  stage: ${file(../../config.yml):custom.provider.stage}
+  region: ${file(../../config.yml):custom.region}
 
   # These environment variables are made available to our functions
   # under process.env.
   environment:
     # Secret key to access Stripe's API (stored in a different, uncommitted file)
-    stripeSecretKey: ${self:custom.environmentSecrets.stripeSecretKey}
+    stripeSecretKey: ${file(env.yml):${self:custom.stage}, file(env.yml):default}
 
   # 'iamRoleStatements' defines the permission policy for the Lambda function.
   # In this case Lambda functions are granted with permissions to access DynamoDB.
