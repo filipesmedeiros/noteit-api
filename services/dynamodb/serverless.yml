@@ -1,4 +1,25 @@
-config: ${file(../../config.yml):config}
+# It's important that this part is always the same for all services in the app, for each deploy
+# Except for the environment variables, that can be different
+config:
+  # Change this variable to be unique within your apps (don't change for the same app)
+  app-name: noteit
+  # Our stage is based on what is passed in when running serverless
+  # commands. Or falls back to what we have set in the provider section.
+  stage: ${opt:stage, dev}
+
+  # Load our secret environment variables based on the current stage.
+  # Fallback to default if it is not in prod.
+  # Uncomment when needed
+  # environmentSecrets: ${file(env.yml):${self:config.stage}, file(env.yml):default}
+
+  # Provider configs
+  provider:
+    name: aws
+    runtime: nodejs8.10
+
+    # Change this according to the stage in which you are developing
+    stage: dev
+    region: eu-west-2
 
 service: ${self:config.app-name}-dynamodb
 
@@ -10,12 +31,12 @@ provider:
   stage: ${self:config.provider.stage}
   region: ${self:config.provider.region}
   # Set the table name here so we can use it while testing locally
-  tableName: ${self:custom.stage}-${self:custom.app-name}-notes
+  tableName: ${self:config.stage}-${self:custom.app-name}-notes
   # Set our DynamoDB throughput for prod and all other non-prod stages.
   tableThroughputs:
     prod: 5
     default: 1
-  tableThroughput: ${self:custom.tableThroughputs.${self:custom.stage}, self:custom.tableThroughputs.default}
+  tableThroughput: ${self:custom.tableThroughputs.${self:config.stage}, self:custom.tableThroughputs.default}
 
 resources:
   Resources:
@@ -46,4 +67,4 @@ resources:
           - NotesTable
           - Arn
       Export:
-        Name: ${self:custom.stage}-NotesTableArn
+        Name: ${self:config.stage}-NotesTableArn
