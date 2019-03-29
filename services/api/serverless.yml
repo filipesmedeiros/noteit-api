@@ -1,44 +1,18 @@
-service: ${self:custom.app-name}-api
+config: ${file(../../config.yml):config}
 
-# Use the serverless-webpack plugin to transpile ES6
-plugins:
-  - serverless-webpack
-  - serverless-offline
-
-custom:
-  # Change this variable to be unique within your apps (don't change for the same app)
-  app-name:  noteit
-  # Our stage is based on what is passed in when running serverless
-  # commands. Or falls back to what we have set in the provider section.
-  stage: ${opt:stage, self:provider.stage}
-  # Set the table name here so we can use it while testing locally
-  tableName: ${self:custom.stage}-${self:custom.app-name}-notes
-  # Set our DynamoDB throughput for prod and all other non-prod stages.
-  tableThroughputs:
-    prod: 5
-    default: 1
-  tableThroughput: ${self:custom.tableThroughputs.${self:custom.stage}, self:custom.tableThroughputs.default}
-  # Load our webpack config
-  webpack:
-    webpackConfig: ./webpack.config.js
-    includeModules: true
-  # Load our secret environment variables based on the current stage.
-  # Fallback to default if it is not in prod.
-  environmentSecrets: ${file(env.yml):${self:custom.stage}, file(env.yml):default}
+service: ${self:config.app-name}-api
 
 provider:
-  name: aws
-  runtime: nodejs8.10
+  name: ${self:config.provider.name}
+  runtime: ${self:config.provider.runtime}
 
   # Change this according to the stage in which you are developing
-  stage: dev
-  region: eu-west-2
+  stage: ${self:config.provider.stage}
+  region: ${self:config.provider.region}
 
   # These environment variables are made available to our functions
   # under process.env.
   environment:
-    # DynamoDB table for storing notes
-    tableName: ${self:custom.tableName}
     # Secret key to access Stripe's API (stored in a different, uncommitted file)
     stripeSecretKey: ${self:custom.environmentSecrets.stripeSecretKey}
 
@@ -57,7 +31,7 @@ provider:
       # Restrict our IAM role permissions to
       # the specific table for the stage
       Resource:
-        - "Fn::GetAtt": [ NotesTable, Arn ]
+        - 'Fn::ImportValue': ${self:config.provider.stage}-NotesTableArn
 
 functions:
   # Defines an HTTP API endpoint that calls the main function in create.js
@@ -67,7 +41,7 @@ functions:
   #     domain api call
   # - authorizer: authenticate using the AWS IAM role
   create:
-    handler: services/notes/create.main
+    handler: create.main
     events:
       - http:
           path: notes
@@ -79,7 +53,7 @@ functions:
     # Defines an HTTP API endpoint that calls the main function in get.js
     # - path: url path is /notes/{id}
     # - method: GET request
-    handler: services/notes/get.main
+    handler: get.main
     events:
       - http:
           path: notes/{id}
@@ -91,7 +65,7 @@ functions:
     # Defines an HTTP API endpoint that calls the main function in list.js
     # - path: url path is /notes
     # - method: GET request
-    handler: services/notes/list.main
+    handler: list.main
     events:
       - http:
           path: notes
@@ -103,7 +77,7 @@ functions:
     # Defines an HTTP API endpoint that calls the main function in update.js
     # - path: url path is /notes/{id}
     # - method: PUT request
-    handler: services/notes/update.main
+    handler: update.main
     events:
       - http:
           path: notes/{id}
@@ -115,7 +89,7 @@ functions:
     # Defines an HTTP API endpoint that calls the main function in delete.js
     # - path: url path is /notes/{id}
     # - method: DELETE request
-    handler: services/notes/delete.main
+    handler: delete.main
     events:
       - http:
           path: notes/{id}
@@ -128,22 +102,10 @@ functions:
   # - path: url path is /billing
   # - method: POST request
   billing:
-    handler: services/billing/billing.main
+    handler: billing.main
     events:
       - http:
           path: billing
           method: post
           cors: true
           authorizer: aws_iam
-
-# Create our resources with separate CloudFormation templates
-resources:
-  # API Gateway Errors
-  - ${file(resources/api-gateway-errors.yml)}
-  # DynamoDB
-  - ${file(resources/dynamodb-table.yml)}
-  # S3
-  - ${file(resources/s3-bucket.yml)}
-  # Cognito
-  - ${file(resources/cognito-user-pool.yml)}
-  - ${file(resources/cognito-identity-pool.yml)}

@@ -1,0 +1,49 @@
+config: ${file(../../config.yml):config}
+
+service: ${self:config.app-name}-dynamodb
+
+provider:
+  name: ${self:config.provider.name}
+  runtime: ${self:config.provider.runtime}
+
+  # Change this according to the stage in which you are developing
+  stage: ${self:config.provider.stage}
+  region: ${self:config.provider.region}
+  # Set the table name here so we can use it while testing locally
+  tableName: ${self:custom.stage}-${self:custom.app-name}-notes
+  # Set our DynamoDB throughput for prod and all other non-prod stages.
+  tableThroughputs:
+    prod: 5
+    default: 1
+  tableThroughput: ${self:custom.tableThroughputs.${self:custom.stage}, self:custom.tableThroughputs.default}
+
+resources:
+  Resources:
+    NotesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        # Generate a name based on the stage
+        TableName: ${self:custom.tableName}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: noteId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: noteId
+            KeyType: RANGE
+        # Set the capacity based on the stage
+        ProvisionedThroughput:
+          ReadCapacityUnits: ${self:custom.tableThroughput}
+          WriteCapacityUnits: ${self:custom.tableThroughput}
+
+  Outputs:
+    NotesTableArn:
+      Value:
+        Fn::GetAtt:
+          - NotesTable
+          - Arn
+      Export:
+        Name: ${self:custom.stage}-NotesTableArn

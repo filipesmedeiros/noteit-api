@@ -1,0 +1,48 @@
+config: ${file(../../config.yml):config}
+
+service: ${self:config.app-name}-s3
+
+provider:
+  name: ${self:config.provider.name}
+  runtime: ${self:config.provider.runtime}
+
+  # Change this according to the stage in which you are developing
+  stage: ${self:config.provider.stage}
+  region: ${self:config.provider.region}
+
+resources:
+  Resources:
+    S3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        # Set the CORS policy
+        CorsConfiguration:
+          CorsRules:
+            -
+              AllowedOrigins:
+                - '*'
+              AllowedHeaders:
+                - '*'
+              AllowedMethods:
+                - GET
+                - PUT
+                - POST
+                - DELETE
+                - HEAD
+              MaxAge: 3000
+
+  # Print out the name of the bucket that is created
+  Outputs:
+    AttachmentsBucketArn:
+      Value:
+        Fn::GetAtt:
+          - S3Bucket
+          - Arn
+      Export:
+        Name: ${self:custom.stage}-AttachmentsBucketArn
+
+    AttachmentsBucketName:
+      Value:
+        Ref: S3Bucket
+      Export:
+        Name: ${self:custom.stage}-AttachmentsBucket
