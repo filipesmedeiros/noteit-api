@@ -1,18 +1,19 @@
 service: noteit-api
 
+# It's important that this part is always the same for all services in the app, for each deploy
+# Except for the environment variables, that can be different
 custom:
+  stage: dev
   # Load our secret environment variables based on the current stage.
   # Fallback to default if it is not in prod.
   environmentSecrets: ${file(env.yml):${self:custom.stage}, file(env.yml):default}
 
-# It's important that this part is always the same for all services in the app, for each deploy
-# Except for the environment variables, that can be different
 provider:
   name: aws
   runtime: nodejs8.10
 
   # Change this according to the stage in which you are developing
-  stage: dev
+  stage: ${self:custom.stage}
   region: eu-west-2
 
   # These environment variables are made available to our functions
