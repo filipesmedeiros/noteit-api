@@ -1,18 +1,23 @@
-service: ${file(../../config.yml):config.app-name}-api
+config: ${file(/config.yml)}
+
+configTest: $file(../../config.yml):config}
+test: ${self:configTest.app-name)}
+
+service: ${self:config.app-name}-api
 
 provider:
-  name: ${file(../../config.yml):config.name}
-  runtime: ${file(../../config.yml):config.runtime}
+  name: ${file(/config.yml):config.name}
+  runtime: ${file(/config.yml):config.runtime}
 
   # Change this according to the stage in which you are developing
-  stage: ${file(../../config.yml):config.stage}
-  region: ${file(../../config.yml):config.region}
+  stage: ${file(/config.yml):config.stage}
+  region: ${file(/config.yml):config.region}
 
   # These environment variables are made available to our functions
   # under process.env.
   environment:
     # Secret key to access Stripe's API (stored in a different, uncommitted file)
-    stripeSecretKey: ${self:custom.environmentSecrets.stripeSecretKey}
+    stripeSecretKey: ${file(/config.yml):config.environmentSecrets.stripeSecretKey}
 
   # 'iamRoleStatements' defines the permission policy for the Lambda function.
   # In this case Lambda functions are granted with permissions to access DynamoDB.
