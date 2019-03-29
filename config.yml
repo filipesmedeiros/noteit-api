@@ -6,7 +6,7 @@ config:
   stage: ${opt:stage, dev}
   # Load our secret environment variables based on the current stage.
   # Fallback to default if it is not in prod.
-  environmentSecrets: ${file(env.yml):${self:custom.stage}, file(env.yml):default}
+  environmentSecrets: ${file(env.yml):${self:config.stage}, file(env.yml):default}
   # Provider configs
   provider:
     name: aws
