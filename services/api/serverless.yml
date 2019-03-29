@@ -1,4 +1,4 @@
-service: ${self:config.app-name}-api
+service: ${file(../../config.yml):config.app-name}-api
 
 provider:
   name: ${file(../../config.yml):config.name}
