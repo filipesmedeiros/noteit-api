@@ -1,6 +1,6 @@
 # It's important that this part is always the same for all services in the app, for each deploy
 # Except for the environment variables, that can be different
-config:
+custom:
   # Change this variable to be unique within your apps (don't change for the same app)
   appname: noteit
   # Our stage is based on what is passed in when running serverless
@@ -8,7 +8,7 @@ config:
   stage: ${opt:stage, 'dev'}
   # Load our secret environment variables based on the current stage.
   # Fallback to default if it is not in prod.
-  environmentSecrets: ${file(env.yml):${self:config.stage}, file(env.yml):default}
+  environmentSecrets: ${file(env.yml):${self:custom.stage}, file(env.yml):default}
   # Provider configs
   provider:
     name: aws
@@ -18,21 +18,21 @@ config:
     stage: dev
     region: eu-west-2
 
-service: ${self:config.appname}-api
+service: ${self:custom.appname}-api
 
 provider:
-  name: ${self:config.provider.name}
-  runtime: ${self:config.provider.runtime}
+  name: ${self:custom.provider.name}
+  runtime: ${self:custom.provider.runtime}
 
   # Change this according to the stage in which you are developing
-  stage: ${self:config.provider.stage}
-  region: ${self:config.provider.region}
+  stage: ${self:custom.provider.stage}
+  region: ${self:custom.provider.region}
 
   # These environment variables are made available to our functions
   # under process.env.
   environment:
     # Secret key to access Stripe's API (stored in a different, uncommitted file)
-    stripeSecretKey: ${self:config.environmentSecrets.stripeSecretKey}
+    stripeSecretKey: ${self:custom.environmentSecrets.stripeSecretKey}
 
   # 'iamRoleStatements' defines the permission policy for the Lambda function.
   # In this case Lambda functions are granted with permissions to access DynamoDB.
