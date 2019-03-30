@@ -3,8 +3,6 @@ service: ${file(../../config.yml):custom.appname}-api
 provider:
   name: ${file(../../config.yml):custom.provider.name}
   runtime: ${file(../../config.yml):custom.provider.runtime}
-
-  # Change this according to the stage in which you are developing
   stage: ${file(../../config.yml):custom.provider.stage}
   region: ${file(../../config.yml):custom.provider.region}
 
@@ -12,7 +10,7 @@ provider:
   # under process.env.
   environment:
     # Secret key to access Stripe's API (stored in a different, uncommitted file)
-    stripeSecretKey: ${file(env.yml):${self:custom.stage}, file(env.yml):default}
+    stripeSecretKey: ${file(env.yml):${file(../../config.yml):custom.provider.stage}, file(env.yml):default}
 
   # 'iamRoleStatements' defines the permission policy for the Lambda function.
   # In this case Lambda functions are granted with permissions to access DynamoDB.

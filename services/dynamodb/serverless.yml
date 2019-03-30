@@ -1,42 +1,20 @@
-# It's important that this part is always the same for all services in the app, for each deploy
-# Except for the environment variables, that can be different
-config:
-  # Change this variable to be unique within your apps (don't change for the same app)
-  app-name: noteit
-  # Our stage is based on what is passed in when running serverless
-  # commands. Or falls back to what we have set in the provider section.
-  stage: ${opt:stage, dev}
+service: ${file(../../config.yml):custom.provider.app-name}-dynamodb
 
-  # Load our secret environment variables based on the current stage.
-  # Fallback to default if it is not in prod.
-  # Uncomment when needed
-  # environmentSecrets: ${file(env.yml):${self:config.stage}, file(env.yml):default}
-
-  # Provider configs
-  provider:
-    name: aws
-    runtime: nodejs8.10
-
-    # Change this according to the stage in which you are developing
-    stage: dev
-    region: eu-west-2
-
-service: ${self:config.app-name}-dynamodb
+custom:
+  tableThroughputs:
+    # When stage is defined as prod on config.yml
+    prod: 5
+    # For every other development stage
+    default: 1
 
 provider:
-  name: ${self:config.provider.name}
-  runtime: ${self:config.provider.runtime}
-
-  # Change this according to the stage in which you are developing
-  stage: ${self:config.provider.stage}
-  region: ${self:config.provider.region}
+  name: ${file(../../config.yml):custom.provider.name}
+  runtime: ${file(../../config.yml):custom.provider.runtime}
+  stage: ${file(../../config.yml):custom.provider.stage}
+  region: ${file(../../config.yml):custom.provider.region}
   # Set the table name here so we can use it while testing locally
-  tableName: ${self:config.stage}-${self:custom.app-name}-notes
-  # Set our DynamoDB throughput for prod and all other non-prod stages.
-  tableThroughputs:
-    prod: 5
-    default: 1
-  tableThroughput: ${self:custom.tableThroughputs.${self:config.stage}, self:custom.tableThroughputs.default}
+  tableName: ${file(../../config.yml):custom.provider.stage}-${file(../../config.yml):custom.appname}-notes
+  tableThroughput: ${self:custom.tableThroughputs.${file(../../config.yml):custom.provider.stage}, self:custom.tableThroughputs.default}
 
 resources:
   Resources:
@@ -44,7 +22,7 @@ resources:
       Type: AWS::DynamoDB::Table
       Properties:
         # Generate a name based on the stage
-        TableName: ${self:custom.tableName}
+        TableName: ${self:provider.tableName}
         AttributeDefinitions:
           - AttributeName: userId
             AttributeType: S
@@ -57,8 +35,8 @@ resources:
             KeyType: RANGE
         # Set the capacity based on the stage
         ProvisionedThroughput:
-          ReadCapacityUnits: ${self:custom.tableThroughput}
-          WriteCapacityUnits: ${self:custom.tableThroughput}
+          ReadCapacityUnits: ${self:provider.tableThroughput}
+          WriteCapacityUnits: ${self:provider.tableThroughput}
 
   Outputs:
     NotesTableArn:
@@ -67,4 +45,4 @@ resources:
           - NotesTable
           - Arn
       Export:
-        Name: ${self:config.stage}-NotesTableArn
+        Name: ${file(../../config.yml):custom.provider.stage}-NotesTableArn

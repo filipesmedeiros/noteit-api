@@ -1,35 +1,10 @@
-# It's important that this part is always the same for all services in the app, for each deploy
-# Except for the environment variables, that can be different
-config:
-  # Change this variable to be unique within your apps (don't change for the same app)
-  app-name: noteit
-  # Our stage is based on what is passed in when running serverless
-  # commands. Or falls back to what we have set in the provider section.
-  stage: ${opt:stage, dev}
-
-  # Load our secret environment variables based on the current stage.
-  # Fallback to default if it is not in prod.
-  # Uncomment when needed
-  # environmentSecrets: ${file(env.yml):${self:config.stage}, file(env.yml):default}
-
-  # Provider configs
-  provider:
-    name: aws
-    runtime: nodejs8.10
-
-    # Change this according to the stage in which you are developing
-    stage: dev
-    region: eu-west-2
-
-service: ${self:config.app-name}-cognito
+service: ${file(../../config.yml):custom.appname}-cognito
 
 provider:
-  name: ${self:config.provider.name}
-  runtime: ${self:config.provider.runtime}
-
-  # Change this according to the stage in which you are developing
-  stage: ${self:config.provider.stage}
-  region: ${self:config.provider.region}
+  name: ${file(../../config.yml):custom.provider.name}
+  runtime: ${file(../../config.yml):custom.provider.runtime}
+  stage: ${file(../../config.yml):custom.provider.stage}
+  region: ${file(../../config.yml):custom.provider.region}
 
 resources:
   Resources:
@@ -37,7 +12,7 @@ resources:
       Type: AWS::Cognito::UserPool
       Properties:
         # Generate a name based on the stage
-        UserPoolName: ${self:config.stage}-mono-user-pool
+        UserPoolName: ${file(../../config.yml):custom.provider.stage}-mono-user-pool
         # Set email as an alias
         UsernameAttributes:
           - email
@@ -48,7 +23,7 @@ resources:
       Type: AWS::Cognito::UserPoolClient
       Properties:
         # Generate an app client name based on the stage
-        ClientName: ${self:config.stage}-mono-user-pool-client
+        ClientName: ${file(../../config.yml):custom.provider.stage}-mono-user-pool-client
         UserPoolId:
           Ref: CognitoUserPool
         ExplicitAuthFlows:
@@ -60,7 +35,7 @@ resources:
       Type: AWS::Cognito::IdentityPool
       Properties:
         # Generate a name based on the stage
-        IdentityPoolName: ${self:config.stage}MonoIdentityPool
+        IdentityPoolName: ${file(../../config.yml):custom.provider.stage}MonoIdentityPool
         # Don't allow unathenticated users
         AllowUnauthenticatedIdentities: false
         # Link to our User Pool
@@ -124,7 +99,7 @@ resources:
                         - ':'
                         - Ref: AWS::AccountId
                         - ':'
-                        - 'Fn::ImportValue': ${self:config.stage}-ApiGatewayRestApiId
+                        - 'Fn::ImportValue': ${file(../../config.yml):custom.provider.stage}-ApiGatewayRestApiId
                         - '/*'
 
                 # Allow users to upload attachments to their
@@ -136,7 +111,7 @@ resources:
                     - Fn::Join:
                         - ''
                         -
-                          - 'Fn::ImportValue': ${self:config.stage}-AttachmentsBucketArn
+                          - 'Fn::ImportValue': ${file(../../config.yml):custom.provider.stage}-AttachmentsBucketArn
                           - '/private/'
                           - '$'
                           - '{cognito-identity.amazonaws.com:sub}/*'
