@@ -9,7 +9,7 @@ custom:
 
 provider:
   name: ${file(../../config.yml):custom.provider.name}
-  runtime: ${file(../../config.yml):custom.provider.runtime}
+  runtime: nodejs8.10
   stage: ${file(../../config.yml):custom.provider.stage}
   region: ${file(../../config.yml):custom.provider.region}
   # Set the table name here so we can use it while testing locally
