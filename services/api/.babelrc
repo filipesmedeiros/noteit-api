@@ -1,6 +1,16 @@
 {
-  "presets": ["jest",
-    ["@babel/preset-env", { "node": "8.10" }],
-    "stage-3"
+  "presets": [
+    "jest",
+    [
+      "@babel/preset-env",
+      {
+        "debug": false,
+        "modules": "commonjs",
+        "targets": {
+          "node": "8.1"
+        },
+        "useBuiltIns": false
+      }
+    ]
   ]
 }
