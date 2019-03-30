@@ -6,7 +6,7 @@ provider:
 
   # Change this according to the stage in which you are developing
   stage: ${file(../../config.yml):custom.provider.stage}
-  region: ${file(../../config.yml):custom.region}
+  region: ${file(../../config.yml):custom.provider.region}
 
   # These environment variables are made available to our functions
   # under process.env.

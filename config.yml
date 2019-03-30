@@ -1,2 +1,9 @@
 custom:
-  region: eu-west-2
+  # This appname has to be unique within all your apps in the region you're developing
+  appname: noteit
+  provider:
+    name: ${file(../../config.yml):custom.provider.name}
+    runtime: ${file(../../config.yml):custom.provider.runtime}
+    # Change this according to the stage in which you are developing
+    stage: dev
+    region: eu-west
