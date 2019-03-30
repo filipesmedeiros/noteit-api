@@ -7,7 +7,7 @@
         "debug": false,
         "modules": "commonjs",
         "targets": {
-          "node": "current"
+          "node": "8.10"
         },
         "useBuiltIns": false
       }
