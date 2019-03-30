@@ -1,5 +1,4 @@
 {
-  "plugins": ["source-map-support", "transform-runtime"],
   "presets": ["jest",
     ["@babel/preset-env", { "node": "8.10" }],
     "stage-3"
