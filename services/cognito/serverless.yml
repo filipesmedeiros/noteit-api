@@ -7,13 +7,14 @@ provider:
   stage: dev
   region: eu-west-2
 
+# TODO give permissions to users when they're not logged in (depends on features)
 resources:
   Resources:
     CognitoUserPool:
       Type: AWS::Cognito::UserPool
       Properties:
         # Generate a name based on the stage
-        UserPoolName: ${file(../../config.yml):custom.provider.stage}-mono-user-pool
+        UserPoolName: ${file(../../config.yml):custom.appname}${file(../../config.yml):custom.provider.stage}-user-pool
         # Set email as an alias
         UsernameAttributes:
           - email
@@ -24,7 +25,7 @@ resources:
       Type: AWS::Cognito::UserPoolClient
       Properties:
         # Generate an app client name based on the stage
-        ClientName: ${file(../../config.yml):custom.provider.stage}-mono-user-pool-client
+        ClientName: ${file(../../config.yml):custom.appname}${file(../../config.yml):custom.provider.stage}-user-pool-client
         UserPoolId:
           Ref: CognitoUserPool
         ExplicitAuthFlows:
@@ -36,7 +37,7 @@ resources:
       Type: AWS::Cognito::IdentityPool
       Properties:
         # Generate a name based on the stage
-        IdentityPoolName: ${file(../../config.yml):custom.provider.stage}MonoIdentityPool
+        IdentityPoolName: ${file(../../config.yml):custom.appname}${file(../../config.yml):custom.provider.stage}IdentityPool
         # Don't allow unathenticated users
         AllowUnauthenticatedIdentities: false
         # Link to our User Pool
