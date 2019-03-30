@@ -1,4 +1,4 @@
-service: ${file(../../config.yml):custom.provider.app-name}-dynamodb
+service: ${file(../../config.yml):custom.appname}-dynamodb
 
 custom:
   tableThroughputs:
