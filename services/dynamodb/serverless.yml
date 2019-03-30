@@ -7,11 +7,12 @@ custom:
     # For every other development stage
     default: 1
 
+# Be careful with these configs (mostly stage and region)
 provider:
-  name: ${file(../../config.yml):custom.provider.name}
+  name: aws
   runtime: nodejs8.10
-  stage: ${file(../../config.yml):custom.provider.stage}
-  region: ${file(../../config.yml):custom.provider.region}
+  stage: dev
+  region: eu-west-2
   # Set the table name here so we can use it while testing locally
   tableName: ${file(../../config.yml):custom.provider.stage}-${file(../../config.yml):custom.appname}-notes
   tableThroughput: ${self:custom.tableThroughputs.${file(../../config.yml):custom.provider.stage}, self:custom.tableThroughputs.default}

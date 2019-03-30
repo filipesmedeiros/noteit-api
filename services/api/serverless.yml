@@ -1,17 +1,16 @@
 service: ${file(../../config.yml):custom.appname}-api
 
+# Be careful with these configs (mostly stage and region)
 provider:
-  name: ${file(../../config.yml):custom.provider.name}
+  name: aws
   runtime: nodejs8.10
-  stage: ${file(../../config.yml):custom.provider.stage}
-  region: ${file(../../config.yml):custom.provider.region}
-
+  stage: dev
+  region: eu-west-2
   # These environment variables are made available to our functions
   # under process.env.
   environment:
     # Secret key to access Stripe's API (stored in a different, uncommitted file)
     stripeSecretKey: ${file(env.yml):${file(../../config.yml):custom.provider.stage}, file(env.yml):default}
-
   # 'iamRoleStatements' defines the permission policy for the Lambda function.
   # In this case Lambda functions are granted with permissions to access DynamoDB.
   iamRoleStatements:
