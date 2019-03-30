@@ -1,16 +1,7 @@
 {
-  "presets": [
-    "jest",
-    [
-      "@babel/preset-env",
-      {
-        "debug": false,
-        "modules": "commonjs",
-        "targets": {
-          "node": "8.10"
-        },
-        "useBuiltIns": false
-      }
-    ]
+  "plugins": ["source-map-support", "transform-runtime"],
+  "presets": ["jest",
+    ["@babel/preset-env", { "node": "8.10" }],
+    "stage-3"
   ]
 }
