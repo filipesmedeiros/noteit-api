@@ -1,5 +1,5 @@
-import * as dynamoDbLib from "../../libs/dynamodb-lib";
-import { success, failure } from "../../libs/response-lib";
+import * as dynamoDbLib from '../../libs/dynamodb-lib';
+import { success, failure } from '../../libs/response-lib';
 
 export async function main(event, context) {
     // process.env is accessing the environment variables at runtime, so the IDE throws a warning
@@ -16,7 +16,7 @@ export async function main(event, context) {
     };
 
     try {
-        const result = await dynamoDbLib.call("delete", params);
+        const result = await dynamoDbLib.call('delete', params);
         return success({ status: true });
     } catch (e) {
         return failure({ status: false });

@@ -1,5 +1,5 @@
-import * as dynamoDbLib from "../../libs/dynamodb-lib";
-import { success, failure } from "../../libs/response-lib";
+import * as dynamoDbLib from '../../libs/dynamodb-lib';
+import { success, failure } from '../../libs/response-lib';
 
 export async function main(event, context) {
     // process.env is accessing the environment variables at runtime, so the IDE throws a warning
@@ -16,12 +16,12 @@ export async function main(event, context) {
     };
 
     try {
-        const result = await dynamoDbLib.call("get", params);
+        const result = await dynamoDbLib.call('get', params);
         if (result.Item) {
             // Return the retrieved item
             return success(result.Item);
         } else {
-            return failure({ status: false, error: "Item not found." });
+            return failure({ status: false, error: 'Item not found.' });
         }
     } catch (e) {
         console.log(e);

@@ -9,6 +9,7 @@ provider:
   # These environment variables are made available to our functions
   # under process.env.
   environment:
+    tableName: ${file(../../config.yml):custom.provider.stage}-${file(../../config.yml):custom.appname}-notes
     # Secret key to access Stripe's API (stored in a different, uncommitted file)
     stripeSecretKey: ${file(env.yml):${file(../../config.yml):custom.provider.stage}, file(env.yml):default}
   # 'iamRoleStatements' defines the permission policy for the Lambda function.

@@ -1,14 +1,12 @@
+import * as dynamoDbLib from "../../libs/dynamodb-lib";
 import uuid from 'uuid';
-import AWS from 'aws-sdk';
-
-const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
 export function main(event, context, callback) {
     // Request body is passed in as a JSON encoded string in 'event.body'
     const data = JSON.parse(event.body);
 
     const params = {
-        TableName: 'notes',
+        TableName: process.env.tableName,
         // 'Item' contains the attributes of the item to be created
         // - 'userId': user identities are federated through the
         //             Cognito Identity Pool, we will use the identity id
@@ -26,7 +24,7 @@ export function main(event, context, callback) {
         }
     };
 
-    dynamoDb.put(params, (error, data) => {
+    dynamoDbLib.call('post', (error, data) => {
         // Set response headers to enable CORS (Cross-Origin Resource Sharing)
         const headers = {
             'Access-Control-Allow-Origin': '*',
