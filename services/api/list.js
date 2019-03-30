@@ -1,4 +1,4 @@
-import * as dynamoDbLib from "../../libs/dynamodb-lib";
+import * as dynamoDbLib from "./libs/dynamodb-lib";
 import uuid from 'uuid';
 
 export function main(event, context, callback) {

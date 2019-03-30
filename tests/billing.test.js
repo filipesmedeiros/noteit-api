@@ -1,4 +1,4 @@
-import * as billLib from "../libs/billing-lib";
+import * as billLib from "../services/api/libs/billing-lib";
 
 test("Lowest tier", () => {
     const storage = 10;
