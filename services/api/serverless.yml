@@ -49,6 +49,8 @@ functions:
   # - authorizer: authenticate using the AWS IAM role
   create:
     handler: create.main
+    tags:
+      app: ${file(../../config.yml):custom.appname}
     events:
       - http:
           path: notes
@@ -61,6 +63,8 @@ functions:
     # - path: url path is /notes/{id}
     # - method: GET request
     handler: get.main
+    tags:
+      app: ${file(../../config.yml):custom.appname}
     events:
       - http:
           path: notes/{id}
@@ -73,6 +77,8 @@ functions:
     # - path: url path is /notes
     # - method: GET request
     handler: list.main
+    tags:
+      app: ${file(../../config.yml):custom.appname}
     events:
       - http:
           path: notes
@@ -85,6 +91,8 @@ functions:
     # - path: url path is /notes/{id}
     # - method: PUT request
     handler: update.main
+    tags:
+      app: ${file(../../config.yml):custom.appname}
     events:
       - http:
           path: notes/{id}
@@ -97,6 +105,8 @@ functions:
     # - path: url path is /notes/{id}
     # - method: DELETE request
     handler: delete.main
+    tags:
+      app: ${file(../../config.yml):custom.appname}
     events:
       - http:
           path: notes/{id}
@@ -110,6 +120,8 @@ functions:
   # - method: POST request
   billing:
     handler: billing.main
+    tags:
+      app: ${file(../../config.yml):custom.appname}
     events:
       - http:
           path: billing
