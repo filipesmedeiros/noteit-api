@@ -4,6 +4,11 @@ plugins:
   - serverless-webpack
   - serverless-offline
 
+custom:
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+
 # Be careful with these configs (mostly stage and region)
 provider:
   name: aws
