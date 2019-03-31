@@ -1,5 +1,9 @@
 service: ${file(../../config.yml):custom.appname}-api
 
+plugins:
+  - serverless-webpack
+  - serverless-offline
+
 # Be careful with these configs (mostly stage and region)
 provider:
   name: aws
