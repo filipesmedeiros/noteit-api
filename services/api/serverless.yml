@@ -21,6 +21,8 @@ provider:
     tableName: ${file(../../config.yml):custom.provider.stage}-${file(../../config.yml):custom.appname}-notes
     # Secret key to access Stripe's API (stored in a different, uncommitted file)
     stripeSecretKey: ${file(env.yml):${file(../../config.yml):custom.provider.stage}, file(env.yml):default}
+  tags:
+    app: ${file(../../config.yml):custom.appname}
   # 'iamRoleStatements' defines the permission policy for the Lambda function.
   # In this case Lambda functions are granted with permissions to access DynamoDB.
   iamRoleStatements:
