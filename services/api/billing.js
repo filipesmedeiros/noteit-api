@@ -1,6 +1,6 @@
-let stripe = require('stripe');
-let calculateCost = require('./libs/billing-lib');
-let { success, failure } = require('./libs/response-lib');
+import stripePackage from 'stripe';
+import { calculateCost } from './libs/billing-lib';
+import { success, failure } from './libs/response-lib';
 
 export async function main(event, context) {
     const { storage, source: stripeToken } = JSON.parse(event.body);
@@ -8,9 +8,10 @@ export async function main(event, context) {
     const description = 'NoteIt charge';
 
     // Load our secret key from the  environment variables
-    const stripe = stripe(process.env.stripeSecretKey);
+    const stripe = stripePackage(process.env.stripeSecretKey);
 
     /**
+     * @var stripe
      * @property stripe.charges
      */
     try {
