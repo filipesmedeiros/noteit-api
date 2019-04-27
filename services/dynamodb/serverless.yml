@@ -14,7 +14,7 @@ provider:
   stage: dev
   region: eu-west-2
   # Set the table name here so we can use it while testing locally
-  tableName: ${file(../../config.yml):custom.provider.stage}-${file(../../config.yml):custom.appname}-notes
+  tableName: ${file(../../config.yml):custom.provider.stage}-${file(../../config.yml):custom.appname}-getNotes
   tableThroughput: ${self:custom.tableThroughputs.${file(../../config.yml):custom.provider.stage}, self:custom.tableThroughputs.default}
   tags:
     app: ${file(../../config.yml):custom.appname}

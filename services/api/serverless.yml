@@ -18,7 +18,7 @@ provider:
   # These environment variables are made available to our functions
   # under process.env.
   environment:
-    tableName: ${file(../../config.yml):custom.provider.stage}-${file(../../config.yml):custom.appname}-notes
+    tableName: ${file(../../config.yml):custom.provider.stage}-${file(../../config.yml):custom.appname}-getNotes
     # Secret key to access Stripe's API (stored in a different, uncommitted file)
     stripeSecretKey: ${file(env.yml):${file(../../config.yml):custom.provider.stage}, file(env.yml):default}
   tags:
@@ -42,7 +42,7 @@ provider:
 
 functions:
   # Defines an HTTP API endpoint that calls the main function in create.js
-  # - path: url path is /notes
+  # - path: url path is /getNotes
   # - method: POST request
   # - cors: enabled CORS (Cross-Origin Resource Sharing) for browser cross
   #     domain api call
@@ -53,63 +53,63 @@ functions:
       app: ${file(../../config.yml):custom.appname}
     events:
       - http:
-          path: notes
+          path: getNotes
           method: post
           cors: true
           authorizer: aws_iam
 
   get:
     # Defines an HTTP API endpoint that calls the main function in get.js
-    # - path: url path is /notes/{id}
+    # - path: url path is /getNotes/{id}
     # - method: GET request
     handler: get.main
     tags:
       app: ${file(../../config.yml):custom.appname}
     events:
       - http:
-          path: notes/{id}
+          path: getNotes/{id}
           method: get
           cors: true
           authorizer: aws_iam
 
   list:
     # Defines an HTTP API endpoint that calls the main function in list.js
-    # - path: url path is /notes
+    # - path: url path is /getNotes
     # - method: GET request
     handler: list.main
     tags:
       app: ${file(../../config.yml):custom.appname}
     events:
       - http:
-          path: notes
+          path: getNotes
           method: get
           cors: true
           authorizer: aws_iam
 
   update:
     # Defines an HTTP API endpoint that calls the main function in update.js
-    # - path: url path is /notes/{id}
+    # - path: url path is /getNotes/{id}
     # - method: PUT request
     handler: update.main
     tags:
       app: ${file(../../config.yml):custom.appname}
     events:
       - http:
-          path: notes/{id}
+          path: getNotes/{id}
           method: put
           cors: true
           authorizer: aws_iam
 
   delete:
     # Defines an HTTP API endpoint that calls the main function in delete.js
-    # - path: url path is /notes/{id}
+    # - path: url path is /getNotes/{id}
     # - method: DELETE request
     handler: delete.main
     tags:
       app: ${file(../../config.yml):custom.appname}
     events:
       - http:
-          path: notes/{id}
+          path: getNotes/{id}
           method: delete
           cors: true
           authorizer: aws_iam
