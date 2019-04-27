@@ -19,14 +19,16 @@ export async function main(event, context) {
         Limit: event.queryStringParameters.pageSize
     };
 
-    if(event.queryStringParameters.start && event.queryStringParameters.start != null && event.queryStringParameters.start !== 'null')
-        params.ExclusiveStartKey = event.queryStringParameters.start;
+    // if(event.queryStringParameters.start && event.queryStringParameters.start != null && event.queryStringParameters.start !== 'null')
+    //    params.ExclusiveStartKey = event.queryStringParameters.start;
 
     try {
         const result = await dynamoDbLib.query(params);
         // Return the matching list of items in response body
 
         let response = result.Items;
+
+        console.log(result);
 
         if(result.LastEvaluatedKey)
             response.lastKey = result.LastEvaluatedKey;
