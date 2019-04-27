@@ -14,7 +14,8 @@ export async function main(event, context) {
         ExpressionAttributeValues: {
             ':userId': event.requestContext.identity.cognitoIdentityId
         },
-        Limit: event.body.pageSize
+        Limit: event.body.pageSize,
+        ExclusiveStartKey: event.body.start
     };
 
     try {
