@@ -1,6 +1,6 @@
-export const TIER_1_PRICE = 4;
-export const TIER_2_PRICE = 2;
-export const TIER_3_PRICE = 1;
+export const TIER_1_PRICE = 0.04;
+export const TIER_2_PRICE = 0.02;
+export const TIER_3_PRICE = 0.01;
 export const TIER_2_THRESHOLD = 10;
 export const TIER_3_THRESHOLD = 100;
 

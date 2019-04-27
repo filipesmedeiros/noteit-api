@@ -13,13 +13,20 @@ export async function main(event, context) {
         KeyConditionExpression: 'userId = :userId',
         ExpressionAttributeValues: {
             ':userId': event.requestContext.identity.cognitoIdentityId
-        }
+        },
+        Limit: 10
     };
 
     try {
-        const result = await dynamoDbLib.call('query', params);
+        const result = await dynamoDbLib.query(params);
         // Return the matching list of items in response body
-        return success(result.Items);
+
+        let response = result.Items;
+
+        if(result.LastEvaluatedKey)
+            response.lastKey = result.LastEvaluatedKey;
+
+        return success(response);
     } catch (e) {
         return failure({ status: false });
     }

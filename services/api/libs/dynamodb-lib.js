@@ -1,8 +1,10 @@
 // noinspection ES6CheckImport
 import AWS from "aws-sdk";
 
-export function call(action, params) {
-    const dynamoDb = new AWS.DynamoDB.DocumentClient();
+// dynamoDb should be const, but WebStorm doesn't like it for some reason
 
-    return dynamoDb[action](params).promise();
+export function query(params) {
+    let dynamoDb = new AWS.DynamoDB.DocumentClient();
+
+    return dynamoDb.query(params).promise();
 }
