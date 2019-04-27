@@ -2,7 +2,7 @@ import * as dynamoDbLib from './libs/dynamodb-lib';
 import { success, failure } from './libs/response-lib';
 
 export async function main(event, context) {
-    const params = {
+    let params = {
         TableName: process.env.tableName,
         // 'KeyConditionExpression' defines the condition for the query
         // - 'userId = :userId': only return items with matching 'userId'
@@ -14,9 +14,11 @@ export async function main(event, context) {
         ExpressionAttributeValues: {
             ':userId': event.requestContext.identity.cognitoIdentityId
         },
-        Limit: event.queryStringParameters.pageSize,
-        ExclusiveStartKey: event.queryStringParameters.start
+        Limit: event.queryStringParameters.pageSize
     };
+
+    if(event.queryStringParameters.start && event.queryStringParameters.start != null && event.queryStringParameters.start !== 'null')
+        params.ExclusiveStartKey = event.queryStringParameters.start;
 
     try {
         const result = await dynamoDbLib.query(params);
