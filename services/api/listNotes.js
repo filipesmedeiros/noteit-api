@@ -24,15 +24,16 @@ export async function main(event, context) {
         const result = await dynamoDbLib.query(params);
         // Return the matching list of items in response body
 
-        let response = result.Items;
-
-        console.log(result);
+        let response = {};
+        response.notes = result.Items;
 
         if(result.LastEvaluatedKey)
             response.lastKey = result.LastEvaluatedKey;
 
         return success(response);
-    } catch (e) {
-        return failure({ status: false });
+    } catch(e) {
+        console.log(e);
+
+        return failure({ status: false }, e.statusCode);
     }
 }
