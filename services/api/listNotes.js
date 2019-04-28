@@ -2,8 +2,6 @@ import * as dynamoDbLib from './libs/dynamodb-lib';
 import { success, failure } from './libs/response-lib';
 
 export async function main(event, context) {
-    console.log(event);
-
     let params = {
         TableName: process.env.tableName,
         // 'KeyConditionExpression' defines the condition for the query
@@ -19,8 +17,8 @@ export async function main(event, context) {
         Limit: event.queryStringParameters.pageSize
     };
 
-    // if(event.queryStringParameters.start && event.queryStringParameters.start != null && event.queryStringParameters.start !== 'null')
-    //    params.ExclusiveStartKey = event.queryStringParameters.start;
+    if(event.queryStringParameters.start && event.queryStringParameters.start != null && event.queryStringParameters.start !== 'null')
+       params.ExclusiveStartKey = event.queryStringParameters.start;
 
     try {
         const result = await dynamoDbLib.query(params);
