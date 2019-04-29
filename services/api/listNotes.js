@@ -17,9 +17,9 @@ export async function main(event, context) {
         Limit: event.queryStringParameters.pageSize
     };
 
-    const hasStartKey = () => event.queryStringParameters.start && event.queryStringParameters.start != null && event.queryStringParameters.start !== 'null';
+    const hasStartKey = event.queryStringParameters.start && event.queryStringParameters.start != null && event.queryStringParameters.start !== 'null';
 
-    if(hasStartKey())
+    if(hasStartKey)
         params.ExclusiveStartKey = JSON.parse(event.queryStringParameters.start);
 
     try {
@@ -29,8 +29,21 @@ export async function main(event, context) {
         let response = {};
         response.notes = result.Items;
 
-        if(hasStartKey())
-            response.count = result.Count;
+        if(!hasStartKey) {
+            const countParams = {
+                TableName: process.env.tableName,
+                KeyConditionExpression: 'userId = :userId',
+                ExpressionAttributeValues: {
+                    ':userId': event.requestContext.identity.cognitoIdentityId
+                },
+                Select: 'COUNT'
+            };
+            const countResult = await dynamoDbLib.query(countParams);
+
+            console.log(countResult);
+
+            response.count = countResult.Count;
+        }
 
         if(result.LastEvaluatedKey)
             response.lastKey = result.LastEvaluatedKey;
