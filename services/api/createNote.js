@@ -5,8 +5,6 @@ import { success, failure } from './libs/response-lib';
 export async function main(event, context) {
     const data = JSON.parse(event.body);
 
-    // process.env is accessing the environment variables at runtime, so the IDE throws a warning
-    // noinspection JSUnresolvedVariable
     const params = {
         TableName: process.env.tableName,
         Item: {
@@ -20,8 +18,11 @@ export async function main(event, context) {
 
     try {
         await dynamoDbLib.call('put', params);
-        return success(params.Item);
-    } catch (e) {
+        // Currently returning nothing back
+        return success({ status: true });
+    } catch(err) {
+        console.log(err);
+
         return failure({ status: false });
     }
 }

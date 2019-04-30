@@ -17,15 +17,15 @@ export async function main(event, context) {
 
     try {
         const result = await dynamoDbLib.call('get', params);
-        if (result.Item) {
+        if(result.Item) {
             // Return the retrieved item
             return success(result.Item);
         } else {
-            return failure({ status: false, error: 'Item not found.' });
+            return failure({ status: false, error: 'Item not found.' }, 204);
         }
-    } catch (e) {
-        console.log(e);
+    } catch(err) {
+        console.log(err);
 
-        return failure({ status: false });
+        return failure({ status: false }, err.statusCode);
     }
 }

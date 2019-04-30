@@ -23,7 +23,7 @@ export async function main(event, context) {
         params.ExclusiveStartKey = JSON.parse(event.queryStringParameters.start);
 
     try {
-        const result = await dynamoDbLib.query(params);
+        const result = await dynamoDbLib.call('query', params);
         // Return the matching list of items in response body
 
         let response = {};
@@ -38,7 +38,7 @@ export async function main(event, context) {
                 },
                 Select: 'COUNT'
             };
-            const countResult = await dynamoDbLib.query(countParams);
+            const countResult = await dynamoDbLib.call('query', countParams);
 
             console.log(countResult);
 
@@ -49,9 +49,9 @@ export async function main(event, context) {
             response.lastKey = result.LastEvaluatedKey;
 
         return success(response);
-    } catch(e) {
-        console.log(e);
+    } catch(err) {
+        console.log(err);
 
-        return failure({ status: false }, e.statusCode);
+        return failure({ status: false }, err.statusCode);
     }
 }
